@@ -37,7 +37,7 @@ st.title('My Name App')
 tab1, tab2, tab3 = st.tabs(['Overall', 'By Name', 'By Year'])
 
 with tab1:
-    st.write('Here is stuff about all the data')
+    st.write('Here is general information about the data')
 
     # Group by year and sex, then count unique names
     unique_names_by_gender = df.groupby(['year', 'sex'])['name'].nunique().reset_index()
@@ -67,7 +67,7 @@ with tab1:
     st.pyplot(fig)
 
 with tab2:
-    st.write('Name')
+    st.write('Here is information for individual names')
 
     # pick a name
     noi = st.text_input('Enter a name')
@@ -94,10 +94,15 @@ with tab2:
     st.pyplot(fig)
 
 with tab3:
-    st.write('Year')
+    st.write('Here is information by year')
 
-    year_of_interest = st.text_input('Enter a year')
-    top_names = df[df['year'] == int(year_of_interest)]
+    year_of_interest = st.text_input('Enter a year', value='2023')
+
+    if year_of_interest.isdigit():
+        top_names = df[df['year'] == int(year_of_interest)]
+    else:
+        st.warning("Please enter a valid year.")
+
     top_female = top_names[top_names['sex'] == 'F'].nlargest(10, 'count')
 
     fig = plt.figure(figsize=(15, 8))
